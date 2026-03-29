@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroShield — Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="bg-[#0a0f0a] text-white font-sans flex h-screen overflow-hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 shrink-0 bg-[#0d130d] border-r border-white/5 flex flex-col py-6 px-4">
+    <div class="flex items-center gap-2 mb-10 px-2">
+      <span class="text-2xl">🌾</span>
+      <span class="text-lg font-bold tracking-tight">AgroShield</span>
+    </div>
+
+    <nav class="flex flex-col gap-1 flex-1">
+      <button onclick="showTab('dashboard')" id="nav-dashboard" class="nav-btn active-nav">
+        <span>📊</span> Dashboard
+      </button>
+      <button onclick="showTab('forecast')" id="nav-forecast" class="nav-btn">
+        <span>📈</span> Forecast
+      </button>
+      <button onclick="showTab('advisory')" id="nav-advisory" class="nav-btn">
+        <span>💊</span> Advisory
+      </button>
+      <button onclick="showTab('alerts')" id="nav-alerts" class="nav-btn">
+        <span>🔔</span> Alerts
+      </button>
+      <button onclick="showTab('weather')" id="nav-weather" class="nav-btn">
+        <span>🌤️</span> Weather Details
+      </button>
+      <button onclick="showTab('history')" id="nav-history" class="nav-btn">
+        <span>🕓</span> History
+      </button>
+      <button onclick="showTab('settings')" id="nav-settings" class="nav-btn">
+        <span>⚙️</span> Settings
+      </button>
+    </nav>
+
+    <div class="border-t border-white/5 pt-4 mt-2">
+      <a href="home.html" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-white transition rounded-lg hover:bg-white/5 mb-1">
+        🏠 Main Screen
+      </a>
+      <p id="user-name" class="text-xs text-gray-500 px-3 mb-2">Loading...</p>
+      <button onclick="logout()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-red-400 transition rounded-lg hover:bg-white/5">
+        🚪 Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 overflow-y-auto">
+
+    <!-- TOP BAR -->
+    <header class="sticky top-0 z-10 bg-[#0a0f0a]/80 backdrop-blur border-b border-white/5 px-8 py-4 flex items-center justify-between">
+      <div>
+        <h2 id="page-title" class="text-lg font-semibold">Dashboard</h2>
+        <p id="page-sub" class="text-xs text-gray-500">AI-powered pest risk overview</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <input id="city" placeholder="Enter city..." class="bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2 rounded-full text-sm focus:outline-none focus:border-green-500/50 w-36"/>
+        <select id="crop" class="bg-white/5 border border-white/10 text-white px-3 py-2 rounded-full text-sm focus:outline-none focus:border-green-500/50">
+          <option value="general" class="bg-gray-900">🌱 General</option>
+          <option value="rice"    class="bg-gray-900">🌾 Rice</option>
+          <option value="wheat"   class="bg-gray-900">🌿 Wheat</option>
+          <option value="cotton"  class="bg-gray-900">🪴 Cotton</option>
+          <option value="tomato"  class="bg-gray-900">🍅 Tomato</option>
+          <option value="maize"   class="bg-gray-900">🌽 Maize</option>
+        </select>
+        <button onclick="predict()" id="analyze-btn" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-5 py-2 rounded-full text-sm transition-all hover:scale-105">
+          Analyze
+        </button>
+      </div>
+    </header>
+
+    <!-- ERROR -->
+    <div id="api-error" class="hidden mx-8 mt-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"></div>
+
+    <!-- LOADING -->
+    <div id="loading" class="hidden flex items-center gap-3 px-8 py-4 text-yellow-400 text-sm">
+      <div class="w-2 h-2 bg-yellow-400 rounded-full animate-bounce"></div>
+      <div class="w-2 h-2 bg-yellow-400 rounded-full animate-bounce [animation-delay:0.15s]"></div>
+      <div class="w-2 h-2 bg-yellow-400 rounded-full animate-bounce [animation-delay:0.3s]"></div>
+      <span>Analyzing weather conditions...</span>
+    </div>
+
+    <!-- ===== TAB: DASHBOARD ===== -->
+    <div id="tab-dashboard" class="tab-content p-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div id="card-risk" class="stat-card">
+          <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Risk Level</p>
+          <p id="val-risk" class="text-3xl font-extrabold text-gray-600">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Likely Pest</p>
+          <p id="val-pest" class="text-lg font-bold text-gray-600">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">Peak Risk Day</p>
+          <p id="val-peak" class="text-xl font-extrabold text-gray-600">—</p>
+        </div>
+        <div class="stat-card">
+          <p class="text-xs text-gray-400 uppercase tracking-widest mb-1">City / Crop</p>
+          <p id="val-city" class="text-xl font-extrabold text-gray-600">—</p>
+        </div>
+      </div>
+
+      <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+        <p class="text-sm font-semibold text-gray-300 mb-4">7-Day Risk Overview</p>
+        <canvas id="chart-dashboard" height="100"></canvas>
+        <p id="empty-dashboard" class="text-center text-gray-600 py-10 text-sm">Enter a city and click Analyze to see results</p>
+      </div>
+    </div>
+
+    <!-- ===== TAB: FORECAST ===== -->
+    <div id="tab-forecast" class="tab-content hidden p-8">
+      <div id="forecast-cards" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="col-span-full text-center text-gray-600 py-16 text-sm">Enter a city and click Analyze to see forecast</div>
+      </div>
+      <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+        <p class="text-sm font-semibold text-gray-300 mb-4">Risk Probability Trend</p>
+        <canvas id="chart-forecast" height="100"></canvas>
+      </div>
+    </div>
+
+    <!-- ===== TAB: ADVISORY ===== -->
+    <div id="tab-advisory" class="tab-content hidden p-8">
+      <div id="advisory-content" class="space-y-4">
+        <div class="text-center text-gray-600 py-16 text-sm">Enter a city and click Analyze to get advisory</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: ALERTS ===== -->
+    <div id="tab-alerts" class="tab-content hidden p-8">
+      <div id="alerts-list" class="space-y-3">
+        <div class="text-center text-gray-600 py-16 text-sm">No alerts yet. Run an analysis to generate alerts.</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: WEATHER DETAILS ===== -->
+    <div id="tab-weather" class="tab-content hidden p-8">
+      <div id="weather-cards" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="col-span-full text-center text-gray-600 py-16 text-sm">Enter a city and click Analyze to see weather details</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: HISTORY ===== -->
+    <div id="tab-history" class="tab-content hidden p-8">
+      <div class="flex justify-between items-center mb-6">
+        <p class="text-sm text-gray-400">Past analyses saved locally</p>
+        <button onclick="clearHistory()" class="text-xs text-red-400 hover:text-red-300 border border-red-500/20 px-3 py-1.5 rounded-full transition">Clear History</button>
+      </div>
+      <div id="history-list" class="space-y-3">
+        <div class="text-center text-gray-600 py-16 text-sm">No history yet. Run an analysis to start tracking.</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: SETTINGS ===== -->
+    <div id="tab-settings" class="tab-content hidden p-8 max-w-lg">
+      <div class="space-y-6">
+        <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+          <h3 class="font-semibold mb-4">Preferences</h3>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm text-gray-400 block mb-1">Default City</label>
+              <input id="default-city" placeholder="e.g. Pune" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+            </div>
+            <div>
+              <label class="text-sm text-gray-400 block mb-1">Risk Alert Threshold</label>
+              <select class="w-full bg-white/5 border border-white/10 text-white px-4 py-2.5 rounded-xl text-sm focus:outline-none">
+                <option value="high" class="bg-gray-900">HIGH only</option>
+                <option value="medium" class="bg-gray-900" selected>MEDIUM and above</option>
+                <option value="low" class="bg-gray-900">All levels</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+          <h3 class="font-semibold mb-4">About</h3>
+          <p class="text-sm text-gray-400">AgroShield uses OpenWeatherMap API + a trained ML model to predict pest outbreak probability for the next 7 days.</p>
+          <div class="mt-4 flex gap-2 flex-wrap">
+            <span class="bg-green-500/10 border border-green-500/20 text-green-400 text-xs px-3 py-1 rounded-full">v1.0.0</span>
+            <span class="bg-white/5 border border-white/10 text-gray-400 text-xs px-3 py-1 rounded-full">Node.js + Python ML</span>
+            <span class="bg-white/5 border border-white/10 text-gray-400 text-xs px-3 py-1 rounded-full">Chart.js</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

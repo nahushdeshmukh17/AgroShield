@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AgroShield — AI Crop Protection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    function launchApp() {
+      window.location.href = localStorage.getItem('agroshield_token') ? 'dashboard.html' : 'login.html';
+    }
+  </script>
+</head>
+<body class="bg-[#0a0f0a] text-white font-sans">
+
+  <!-- NAVBAR -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0f0a]/80 backdrop-blur-md border-b border-white/5 px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">🌾</span>
+      <span class="text-xl font-bold tracking-tight">AgroShield</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8 text-sm text-gray-400">
+      <a href="#features" class="hover:text-white transition">Features</a>
+      <a href="#how" class="hover:text-white transition">How it works</a>
+      <a href="#stats" class="hover:text-white transition">Impact</a>
+    </div>
+    <button onclick="launchApp()" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-5 py-2 rounded-full text-sm transition-all hover:scale-105">
+      Launch App →
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#14532d33_0%,_transparent_70%)] pointer-events-none"></div>
+    <div class="glow-orb"></div>
+
+    <span class="inline-block bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 tracking-widest uppercase">
+      AI-Powered Pest Intelligence
+    </span>
+    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight max-w-4xl">
+      Predict Pests<br/>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300">Before They Strike</span>
+    </h1>
+    <p class="mt-6 text-gray-400 text-lg max-w-xl">
+      AgroShield combines real-time weather data with machine learning to forecast crop pest risk — giving farmers a 7-day head start.
+    </p>
+    <div class="mt-10 flex gap-4 flex-wrap justify-center">
+      <button onclick="launchApp()" class="bg-green-500 hover:bg-green-400 text-black font-bold px-8 py-3.5 rounded-full text-base transition-all hover:scale-105 shadow-lg shadow-green-500/20">
+        Get Started Free
+      </button>
+      <a href="#how">
+        <button class="border border-white/10 hover:border-white/30 px-8 py-3.5 rounded-full text-base transition-all hover:bg-white/5">
+          See How It Works
+        </button>
+      </a>
+    </div>
+
+    <div class="mt-16 flex flex-wrap justify-center gap-4 text-sm text-gray-400">
+      <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-full">🌦 Live Weather Data</span>
+      <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-full">🤖 ML Risk Engine</span>
+      <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-full">📊 7-Day Forecast</span>
+      <span class="bg-white/5 border border-white/10 px-4 py-2 rounded-full">💊 Smart Advisory</span>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="stats" class="py-20 px-6 border-y border-white/5">
+    <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <p class="text-4xl font-extrabold text-green-400">94%</p>
+        <p class="text-gray-400 text-sm mt-1">Prediction Accuracy</p>
+      </div>
+      <div>
+        <p class="text-4xl font-extrabold text-green-400">7</p>
+        <p class="text-gray-400 text-sm mt-1">Days Advance Warning</p>
+      </div>
+      <div>
+        <p class="text-4xl font-extrabold text-green-400">12K+</p>
+        <p class="text-gray-400 text-sm mt-1">Farmers Protected</p>
+      </div>
+      <div>
+        <p class="text-4xl font-extrabold text-green-400">30%</p>
+        <p class="text-gray-400 text-sm mt-1">Crop Loss Reduced</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- FEATURES -->
+  <section id="features" class="py-24 px-6 max-w-6xl mx-auto">
+    <p class="text-center text-green-400 text-sm font-semibold tracking-widest uppercase mb-3">Features</p>
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-14">Everything a farmer needs</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="feature-card"><div class="text-3xl mb-4">🌡️</div><h3 class="font-bold text-lg mb-2">Real-Time Weather</h3><p class="text-gray-400 text-sm">Live temperature, humidity, and rainfall data fetched for any city worldwide.</p></div>
+      <div class="feature-card"><div class="text-3xl mb-4">🧠</div><h3 class="font-bold text-lg mb-2">AI Risk Engine</h3><p class="text-gray-400 text-sm">Trained ML model scores pest outbreak probability for each of the next 7 days.</p></div>
+      <div class="feature-card"><div class="text-3xl mb-4">📈</div><h3 class="font-bold text-lg mb-2">Visual Forecast</h3><p class="text-gray-400 text-sm">Interactive charts showing risk trends so you can plan spraying schedules.</p></div>
+      <div class="feature-card"><div class="text-3xl mb-4">💊</div><h3 class="font-bold text-lg mb-2">Smart Advisory</h3><p class="text-gray-400 text-sm">Actionable pesticide and prevention recommendations based on risk level.</p></div>
+      <div class="feature-card"><div class="text-3xl mb-4">🔔</div><h3 class="font-bold text-lg mb-2">Risk Alerts</h3><p class="text-gray-400 text-sm">Instant HIGH/MEDIUM/LOW risk classification with color-coded alerts.</p></div>
+      <div class="feature-card"><div class="text-3xl mb-4">🌍</div><h3 class="font-bold text-lg mb-2">Any City</h3><p class="text-gray-400 text-sm">Works for any location globally — just type your city name and get results.</p></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="py-24 px-6 bg-white/[0.02] border-y border-white/5">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-center text-green-400 text-sm font-semibold tracking-widest uppercase mb-3">Process</p>
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-14">How AgroShield works</h2>
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="step-card"><div class="step-num">1</div><h3 class="font-semibold mt-3 mb-1">Enter City</h3><p class="text-gray-400 text-sm">Type your farm's nearest city</p></div>
+        <div class="text-gray-600 text-2xl hidden md:block">→</div>
+        <div class="step-card"><div class="step-num">2</div><h3 class="font-semibold mt-3 mb-1">Fetch Weather</h3><p class="text-gray-400 text-sm">Live 7-day forecast is pulled</p></div>
+        <div class="text-gray-600 text-2xl hidden md:block">→</div>
+        <div class="step-card"><div class="step-num">3</div><h3 class="font-semibold mt-3 mb-1">AI Analysis</h3><p class="text-gray-400 text-sm">ML model scores pest risk per day</p></div>
+        <div class="text-gray-600 text-2xl hidden md:block">→</div>
+        <div class="step-card"><div class="step-num">4</div><h3 class="font-semibold mt-3 mb-1">Get Advisory</h3><p class="text-gray-400 text-sm">Receive actionable protection plan</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-28 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#14532d22_0%,_transparent_70%)] pointer-events-none"></div>
+    <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Ready to protect your crops?</h2>
+    <p class="text-gray-400 mb-8">Join thousands of farmers using AI to stay ahead of pests.</p>
+    <button onclick="launchApp()" class="bg-green-500 hover:bg-green-400 text-black font-bold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 shadow-xl shadow-green-500/20">
+      Launch AgroShield →
+    </button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 px-6 py-8 text-center text-gray-600 text-sm">
+    <p>🌾 AgroShield — AI-powered crop protection. Built to protect farmers.</p>
+  </footer>
+
+</body>
+</html>
