@@ -9,6 +9,7 @@ const connectDB = require("./config/config");
 const weatherRoutes = require("./routes/weatherRoutes");
 const authRoutes = require("./routes/authRoutes");
 const historyRoutes = require("./routes/historyRoutes");
+const mlRoutes = require("./routes/mlRoutes");
 
 const app = express();
 app.use(express.json());
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/weather", weatherRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/history", historyRoutes);
+app.use("/api/ml", mlRoutes);
 
 connectDB().then(() => {
   app.listen(5000, () => {

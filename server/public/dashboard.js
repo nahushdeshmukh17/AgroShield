@@ -20,6 +20,7 @@ const TAB_META = {
   dashboard: ['Dashboard',        'AI-powered pest risk overview'],
   forecast:  ['Forecast',         '7-day day-by-day risk breakdown'],
   advisory:  ['Advisory',         'Recommended actions based on risk'],
+  'crop-rec':['Crop Rec.',        'Discover the best crop for your soil'],
   alerts:    ['Alerts',           'Risk notifications for your region'],
   weather:   ['Weather Details',  '7-day temperature, humidity & wind'],
   history:   ['History',          'Past analyses saved on this device'],
@@ -233,3 +234,56 @@ async function predict() {
   }
 
 }
+
+// ── Crop Recommendation predict ───────────────────────────────
+async function predictCrop() {
+  const btn = document.getElementById('analyze-crop-btn');
+  const resEl = document.getElementById('crop-result');
+  const errEl = document.getElementById('crop-error');
+  const valEl = document.getElementById('crop-prediction-val');
+
+  errEl.classList.add('hidden');
+  resEl.classList.add('hidden');
+
+  const features = [
+    parseFloat(document.getElementById('crop-n').value),
+    parseFloat(document.getElementById('crop-p').value),
+    parseFloat(document.getElementById('crop-k').value),
+    parseFloat(document.getElementById('crop-temp').value),
+    parseFloat(document.getElementById('crop-humidity').value),
+    parseFloat(document.getElementById('crop-ph').value),
+    parseFloat(document.getElementById('crop-rain').value),
+    parseFloat(document.getElementById('crop-moisture').value),
+    parseFloat(document.getElementById('crop-soiltype').value),
+  ];
+
+  if (features.some(isNaN)) {
+    errEl.textContent = 'Please fill out all fields with valid numbers.';
+    errEl.classList.remove('hidden');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+
+  try {
+    const res = await fetch('/api/ml/predict/crop', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ features })
+    });
+    const data = await res.json();
+    
+    if (!res.ok) throw new Error(data.error || 'Failed to get recommendation');
+    
+    valEl.textContent = data.prediction || 'Unknown';
+    resEl.classList.remove('hidden');
+  } catch (e) {
+    errEl.textContent = e.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Get Recommendation';
+  }
+}
+

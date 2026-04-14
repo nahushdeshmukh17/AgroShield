@@ -27,6 +27,9 @@
       <button onclick="showTab('advisory')" id="nav-advisory" class="nav-btn">
         <span>💊</span> Advisory
       </button>
+      <button onclick="showTab('crop-rec')" id="nav-crop-rec" class="nav-btn">
+        <span>🌱</span> Crop Rec.
+      </button>
       <button onclick="showTab('alerts')" id="nav-alerts" class="nav-btn">
         <span>🔔</span> Alerts
       </button>
@@ -131,6 +134,60 @@
     <div id="tab-advisory" class="tab-content hidden p-8">
       <div id="advisory-content" class="space-y-4">
         <div class="text-center text-gray-600 py-16 text-sm">Enter a city and click Analyze to get advisory</div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: CROP RECOMMENDATION ===== -->
+    <div id="tab-crop-rec" class="tab-content hidden p-8">
+      <div class="max-w-2xl mx-auto bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+        <h3 class="font-semibold mb-6">Enter Soil and Weather Metrics</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Nitrogen (N)</label>
+            <input id="crop-n" type="number" value="90" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Phosphorous (P)</label>
+            <input id="crop-p" type="number" value="42" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Potassium (K)</label>
+            <input id="crop-k" type="number" value="43" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Temperature (°C)</label>
+            <input id="crop-temp" type="number" value="20.8" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Humidity (%)</label>
+            <input id="crop-humidity" type="number" value="82.0" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">pH Level</label>
+            <input id="crop-ph" type="number" value="6.5" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Rainfall (mm)</label>
+            <input id="crop-rain" type="number" value="202.9" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div>
+            <label class="text-sm text-gray-400 block mb-1">Soil Moisture</label>
+            <input id="crop-moisture" type="number" value="45" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+          <div class="col-span-full">
+            <label class="text-sm text-gray-400 block mb-1">Soil Type</label>
+            <input id="crop-soiltype" type="number" value="1" placeholder="Encoded Category (e.g. 1, 2)" class="w-full bg-white/5 border border-white/10 text-white placeholder-gray-500 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-green-500/50"/>
+          </div>
+        </div>
+        <button onclick="predictCrop()" id="analyze-crop-btn" class="w-full bg-green-500 hover:bg-green-400 text-black font-semibold px-5 py-3 rounded-xl text-sm transition-all hover:scale-[1.02]">
+          Get Recommendation
+        </button>
+        
+        <div id="crop-result" class="hidden mt-6 bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+          <p class="text-sm text-gray-400 mb-1">Recommended Crop</p>
+          <p id="crop-prediction-val" class="text-3xl font-extrabold text-green-400 uppercase tracking-widest">—</p>
+        </div>
+        <div id="crop-error" class="hidden mt-4 text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3"></div>
       </div>
     </div>
 
